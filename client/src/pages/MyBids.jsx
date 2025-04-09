@@ -125,7 +125,7 @@ const MyBids = () => {
                           <span
                             className={`h-1.5 w-1.5 rounded-full bg-yellow-500 `}
                           ></span>
-                          <h2 className="text-sm font-normal ">
+                          <h2 className={`${bid?.status === "Completed" && 'text-green-500'} ${bid?.status ==="rejected" && `text-red-700` } text-sm font-normal `}>
                             {bid?.status}
                           </h2>
                         </div>
@@ -139,7 +139,7 @@ const MyBids = () => {
                               "Completed"
                             )
                           }
-                          disabled={bid?.status === "Completed"}
+                          disabled={bid?.status === "Completed" || bid?.status === "rejected"}
                           className="${} text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed"
                         >
                           <svg
