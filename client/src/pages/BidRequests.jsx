@@ -18,7 +18,16 @@ const BidRequests = () => {
 
 
   const handleStatusChange = async(id,pervStatus,status)=>{
-    console.table({id,pervStatus,status})
+    if(pervStatus === status || pervStatus === "completed")
+      return console.log('Not Allowed')
+    try {
+      const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status-update/${id}`, {status});
+      console.log(data);
+      fetchBidRequestDatas();
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
 
@@ -155,7 +164,7 @@ const BidRequests = () => {
                         </button>
 
                         <button 
-                        onClick={()=> handleStatusChange(bid?._id, bid?.status,"Rejected")}
+                        onClick={()=> handleStatusChange(bid?._id, bid?.status,"rejected")}
                         className='disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none'>
                           <svg
                             xmlns='http://www.w3.org/2000/svg'

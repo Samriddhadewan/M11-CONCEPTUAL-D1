@@ -17,6 +17,21 @@ const MyBids = () => {
     fetchBidsData();
   }, [user]);
 
+  const handleStatusChange = async (id, prevStatus, status) => {
+    if (prevStatus !== "in Progress") {
+      return;
+    }
+    try {
+      const { data } = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/bid-status-update/${id}`,
+        { status }
+      );
+      fetchBidsData();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <section className="container px-4 mx-auto my-12">
@@ -24,9 +39,7 @@ const MyBids = () => {
         <h2 className="text-lg font-medium text-gray-800 ">My Bids</h2>
 
         <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full ">
-          {
-            bid.length
-          }
+          {bid.length}
           bids
         </span>
       </div>
@@ -90,9 +103,7 @@ const MyBids = () => {
                       </td>
 
                       <td className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap">
-                        {
-                          format(new Date(bid?.date), "PP")
-                        }
+                        {format(new Date(bid?.date), "PP")}
                       </td>
 
                       <td className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap">
@@ -114,13 +125,22 @@ const MyBids = () => {
                           <span
                             className={`h-1.5 w-1.5 rounded-full bg-yellow-500 `}
                           ></span>
-                          <h2 className="text-sm font-normal ">{bid?.status}</h2>
+                          <h2 className="text-sm font-normal ">
+                            {bid?.status}
+                          </h2>
                         </div>
                       </td>
                       <td className="px-4 py-4 text-sm whitespace-nowrap">
                         <button
-                          title="Mark Complete"
-                          className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed"
+                          onClick={() =>
+                            handleStatusChange(
+                              bid?._id,
+                              bid?.status,
+                              "Completed"
+                            )
+                          }
+                          disabled={bid?.status === "Completed"}
+                          className="${} text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
